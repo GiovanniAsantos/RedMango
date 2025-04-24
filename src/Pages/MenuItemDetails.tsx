@@ -3,7 +3,8 @@ import { useGetMenuItemsByIdQuery } from "../apis/menuItemApi";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUpdateShoppingCartMutation } from "../apis/shoppingCartApi";
-//USER ID 4187736b-b8ce-49f5-9a1a-bbd21e008f53
+import { MainLoader, MiniLoader } from "../Components/Page/Common";
+//USER ID a9366a0e-e759-4dd6-967e-50506a26a7fa
 
 function MenuItemDetails() {
   const navigate = useNavigate();
@@ -20,17 +21,15 @@ function MenuItemDetails() {
     }
     setQuantity(newQuantity);
   };
- 
+
   const handleAddToCart = async (menuItemId: number) => {
     setIsAddingToCart(true);
 
     const response = await updateShoppingCart({
       menuItemId: menuItemId,
       updateQuantityBy: quantity,
-      userId: "4187736b-b8ce-49f5-9a1a-bbd21e008f53",
+      userId: "a9366a0e-e759-4dd6-967e-50506a26a7fa",
     });
-
-    console.log("🚀 ~ handleAddToCart ~ response:", response);
     setIsAddingToCart(false);
   };
 
@@ -39,7 +38,11 @@ function MenuItemDetails() {
   }
 
   if (isLoading) {
-    return <div className="d-flex justify-content-center">Loading...</div>;
+    return (
+      <div className="d-flex justify-content-center">
+        <MainLoader />
+      </div>
+    );
   }
 
   return (
@@ -89,12 +92,18 @@ function MenuItemDetails() {
           </span>
           <div className="row pt-4">
             <div className="col-5">
-              <button
-                className="btn btn-success form-control"
-                onClick={() => handleAddToCart(data.result.id)}
-              >
-                Add to Cart
-              </button>
+              {isAddingToCart ? (
+                <button className="btn btn-success form-control">
+                  <MiniLoader />
+                </button>
+              ) : (
+                <button
+                  className="btn btn-success form-control"
+                  onClick={() => handleAddToCart(data.result.id)}
+                >
+                  Add to Cart
+                </button>
+              )}
             </div>
 
             <div className="col-5 ">

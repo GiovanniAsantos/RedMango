@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { menuItemModel } from "../../../Interfaces";
 import { Link } from "react-router-dom";
 import { useUpdateShoppingCartMutation } from "../../../apis/shoppingCartApi";
-import { MiniLoader } from "./Common";
+import { MiniLoader } from "../Common";
 
 interface Props {
   menuItem: menuItemModel;
@@ -18,7 +18,7 @@ function MenuItemCard(props: Props) {
     const response = await updateShoppingCart({
       menuItemId: menuItemId,
       updateQuantityBy: 1,
-      userId: "4187736b-b8ce-49f5-9a1a-bbd21e008f53",
+      userId: "a9366a0e-e759-4dd6-967e-50506a26a7fa",
     });
     setIsAddingToCart(false);
   };
