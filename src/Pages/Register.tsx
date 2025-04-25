@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { SD_Roles } from "../Utility/SD";
-import { inputHelper } from "../Helper";
+import { inputHelper, toastNotify } from "../Helper";
+import { useRegisterUserMutation } from "../apis/authApi";
+import { apiResponse } from "../Interfaces";
+import { MainLoader } from "../Components/Page/Common";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const [registerUser] = useRegisterUserMutation();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [userInput, setUserInput] = useState({
     username: "",
@@ -18,9 +24,28 @@ function Register() {
     setUserInput(tempData);
   };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const response: apiResponse = await registerUser({
+      username: userInput.username,
+      password: userInput.password,
+      role: userInput.role,
+      name: userInput.name,
+    });
+
+    if (response.data) {
+      toastNotify("Registration successful! Please Login to continue");
+      navigate("/login");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div className="container text-center">
-      <form method="post">
+      {loading && <MainLoader />}
+      <form method="post" onSubmit={handleSubmit}>
         <h1 className="mt-5">Register</h1>
         <div className="mt-5">
           <div className="col-sm-6 offset-sm-3 col-xs-12 mt-4">
@@ -28,6 +53,7 @@ function Register() {
               type="text"
               className="form-control"
               placeholder="Enter Username"
+              name="username"
               required
               value={userInput.username}
               onChange={handleUserInput}
@@ -38,6 +64,7 @@ function Register() {
               type="text"
               className="form-control"
               placeholder="Enter Name"
+              name="name"
               required
               value={userInput.name}
               onChange={handleUserInput}
@@ -48,6 +75,7 @@ function Register() {
               type="password"
               className="form-control"
               placeholder="Enter Password"
+              name="password"
               required
               value={userInput.password}
               onChange={handleUserInput}
@@ -57,6 +85,7 @@ function Register() {
             <select
               className="form-control form-select"
               required
+              name="role"
               value={userInput.role}
               onChange={handleUserInput}
             >
@@ -67,7 +96,7 @@ function Register() {
           </div>
         </div>
         <div className="mt-5">
-          <button type="submit" className="btn btn-success">
+          <button type="submit" className="btn btn-success" disabled={loading}>
             Register
           </button>
         </div>

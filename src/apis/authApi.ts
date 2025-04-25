@@ -11,7 +11,7 @@ const authApi = createApi({
       query: (userData) => ({
         url: `auth/register`,
         method: "POST",
-       header:{
+       headers:{
         "Content-type" : "application/json"
        },
        body: userData
@@ -21,7 +21,7 @@ const authApi = createApi({
       query: (userCredentials) => ({
         url: `auth/login`,
         method: "POST",
-       header:{
+       headers:{
         "Content-type" : "application/json"
        },
        body: userCredentials
