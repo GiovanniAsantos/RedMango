@@ -8,7 +8,6 @@ import { toastNotify } from "../Helper";
 import { apiResponse, userModel } from "../Interfaces";
 import { RootState } from "../Storage/Redux/store";
 import { useSelector } from "react-redux";
-//USER ID a9366a0e-e759-4dd6-967e-50506a26a7fa
 
 function MenuItemDetails() {
   const navigate = useNavigate();
