@@ -2,6 +2,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useLocation } from "react-router-dom";
 import { PaymentForm } from "../Components/Page/Payment";
+import { OrderSummary } from "../Components/Page/Order";
 
 function Payment() {
   const {
@@ -12,16 +13,25 @@ function Payment() {
     "pk_test_51MG6xmDU3OjDrP4GJV8avgtFNNGxikOffHWtYgncDFkahat38KLX3foPPgFbk0JHNG2FmYhIpSNl2lqbnR3uEfRM00Bv0LptTW"
   );
 
-  console.log(apiResult);
-  console.log(userInput);
-
   const options = {
     clientSecret: apiResult.clientSecret,
   };
 
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentForm />
+      <div className="container m-5 p-5">
+        <div className="row">
+          <div className="col-md-7">
+            <OrderSummary data={apiResult} userInput={userInput} />
+          </div>
+          <div className="col-md-4 offset-md-1">
+            <div className="text-success">Payment</div>
+            <div className="mt-5">
+              <PaymentForm data={apiResult} userInput={userInput}/>
+            </div>
+          </div>
+        </div>
+      </div>
     </Elements>
   );
 }
