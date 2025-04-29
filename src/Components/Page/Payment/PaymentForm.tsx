@@ -9,12 +9,14 @@ import { orderSummaryProps } from "../Order/orderSummaryProps";
 import { apiResponse, cartItemModel } from "../../../Interfaces";
 import { useCreateOrderMutation } from "../../../apis/orderApi";
 import { SD_Status } from "../../../Utility/SD";
+import { useNavigate } from "react-router-dom";
 
 const PaymentForm = ({ data, userInput }: orderSummaryProps) => {
   const elements = useElements();
   const stripe = useStripe();
   const [createOrder] = useCreateOrderMutation();
-  const [irProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // We don't want to let default form submission happen here,
@@ -40,7 +42,7 @@ const PaymentForm = ({ data, userInput }: orderSummaryProps) => {
       let totalItems = 0;
 
       const orderDetailsDTO: any = [];
-      data.cartItems.forEach((item: cartItemModel) => {
+      data.cartItems?.forEach((item: cartItemModel) => {
         const tempOrderDetail: any = {};
         tempOrderDetail["menuItemId"] = item.menuItem?.id;
         tempOrderDetail["quantity"] = item?.quantity;
@@ -57,16 +59,32 @@ const PaymentForm = ({ data, userInput }: orderSummaryProps) => {
         pickupEmail: userInput.email,
         totalItems: totalItems,
         orderTotal: grandTotal,
+        orderDetailsDTO: orderDetailsDTO,
         stripePaymentIntentID: data.stripePaymentIntentId,
         aplicationUserId: data.userId,
-        status: result.paymentIntent.status === "succeeded" ? SD_Status.CONFIRMED : SD_Status.PENDING,
+        status:
+          result.paymentIntent.status === "succeeded"
+            ? SD_Status.CONFIRMED
+            : SD_Status.PENDING,
       });
+      if (response) {
+        if (response.data?.result.status === SD_Status.CONFIRMED) {
+          navigate(
+            `/order/orderConfirmed/${response.data.result.orderHeaderId}`
+          );
+        } else {
+          navigate("/failed");
+        }
+      }
+      setIsProcessing(false);
     }
   };
   return (
     <form onSubmit={handleSubmit}>
       <PaymentElement />
-      <button className="btn btn-success mt-5 w-100">Submit</button>
+      <button className="btn btn-success mt-5 w-100" disabled={!stripe || isProcessing}>
+        {isProcessing ? "Processing..." : "Submit Order"}
+      </button>
     </form>
   );
 };
