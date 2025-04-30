@@ -49,7 +49,7 @@ function OrderList({ isLoading, orderData }: OrderListProps) {
                       className="btn btn-success"
                       onClick={() =>
                         navigate(
-                          "order/orderDetails/" + orderItem.orderHeaderId
+                          "/order/orderDetails/" + orderItem.orderHeaderId
                         )
                       }
                     >

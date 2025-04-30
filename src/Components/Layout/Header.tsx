@@ -66,6 +66,11 @@ function Header() {
                   </NavLink>
                   <ul className="dropdown-menu">
                     <li>
+                      <NavLink className="dropdown-item" to="menuItem/menuItemList">
+                        Menu Item
+                      </NavLink>
+                    </li>
+                    <li>
                       <NavLink className="dropdown-item" to="order/myOrders">
                         My Orders
                       </NavLink>
@@ -73,11 +78,6 @@ function Header() {
                     <li>
                       <NavLink className="dropdown-item" to="order/allOrders">
                         All Orders
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink className="dropdown-item" to="">
-                        Something else here
                       </NavLink>
                     </li>
                   </ul>

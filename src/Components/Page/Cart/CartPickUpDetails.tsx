@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useInitiatePaymentMutation } from "../../../apis/paymenetApi";
@@ -33,11 +33,19 @@ function CartPickUpDetails() {
   });
 
   const [userInput, setUserInput] = useState(initialUserData);
-  const [initiatePayment] = useInitiatePaymentMutation()
+  const [initiatePayment] = useInitiatePaymentMutation();
   const handleUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tempData = inputHelper(e, userInput);
     setUserInput(tempData);
   };
+
+  useEffect(() => {
+    setUserInput({
+      name: userData.fullName,
+      email: userData.email,
+      phoneNumber: "",
+    });
+  }, [userData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,7 +53,7 @@ function CartPickUpDetails() {
 
     const { data }: apiResponse = await initiatePayment(userData.id);
     navigate("/payment", {
-      state: { apiResult: data?.result, userInput},
+      state: { apiResult: data?.result, userInput },
     });
   };
 

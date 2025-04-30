@@ -8,6 +8,7 @@ function OrderDetails() {
   const { data, isLoading } = useGetOrderDetailsQuery(id);
   let userInput, orderDetails;
   if (!isLoading && data?.result) {
+    console.log("🚀 ~ OrderDetails ~ data?.result:", data?.result)
     userInput = {
       name: data.result[0].pickupName,
       email: data.result[0].pickupEmail,
