@@ -12,7 +12,6 @@ function OrderList({ isLoading, orderData }: OrderListProps) {
       {isLoading && <MainLoader />}
       {!isLoading && (
         <div className="table p-5">
-          <h1 className="text-success">Orders List</h1>
           <div className="p-2">
             <div className="row border">
               <div className="col-1">ID</div>
@@ -24,7 +23,7 @@ function OrderList({ isLoading, orderData }: OrderListProps) {
               <div className="col-2">Status</div>
               <div className="col-1"></div>
             </div>
-            {orderData.map((orderItem: orderHeaderModel) => {
+            {orderData?.map((orderItem: orderHeaderModel) => {
               const badgeColor = getStatusColor(orderItem.status!);
 
               return (
